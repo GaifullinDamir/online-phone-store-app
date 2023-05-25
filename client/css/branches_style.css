@@ -1,0 +1,38 @@
+main .container{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    
+}
+
+#branches_content{
+    min-height: 100vh;
+    background-color: #121212;
+    margin-left: -8px;
+    border: 0.5px solid #212121;
+}
+
+#branches_content h2{
+    text-align: center;
+    color: #ffffff;
+    font-weight: 100;
+    font-size: 35px;
+}
+
+#branches_content figure{
+    color: #f3f3f3;
+    font-size: 15px;
+    text-align:center;
+}
+
+main .container{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-flow: row wrap;
+    align-content:stretch;
+}
+
+.branch{
+    flex-basis: 20%;
+}
