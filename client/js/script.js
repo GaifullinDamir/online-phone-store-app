@@ -22,6 +22,7 @@ window.addEventListener('DOMContentLoaded', () =>{
             this.price = price,
             this.classes = classes;
         }
+        
 
         returnElement(){
             const element = document.createElement('div');
@@ -41,6 +42,7 @@ window.addEventListener('DOMContentLoaded', () =>{
             return element;
         }
     }
+    let gPhones = [];
     
     class Tab{
         constructor(parentSelector, phones, ...classes){
@@ -143,6 +145,22 @@ window.addEventListener('DOMContentLoaded', () =>{
                 idInput.value = elemId;
             })
         })
+        samsungs.forEach(phone => {
+            phone.addEventListener('click', (e) => {
+                e.preventDefault();
+                let elemId = e.currentTarget.childNodes[1].id;
+                console.log(e.currentTarget.childNodes[1].id);
+                idInput.value = elemId;
+            })
+        })
+        honors.forEach(phone => {
+            phone.addEventListener('click', (e) => {
+                e.preventDefault();
+                let elemId = e.currentTarget.childNodes[1].id;
+                console.log(e.currentTarget.childNodes[1].id);
+                idInput.value = elemId;
+            })
+        })
         return [iphones, samsungs, honors];
     }
 
@@ -152,6 +170,7 @@ window.addEventListener('DOMContentLoaded', () =>{
                 const phones = dataParse(data);
                 const phoneTabs = [createTabs(phones[0]), createTabs(phones[1]), createTabs(phones[2])];
                 showTabContent(0, phoneTabs);
+                gPhones = [...data[0], ...data[1], ...data[2]];
                 return phoneTabs;
             })
             .then((phoneTabs) => {
@@ -166,6 +185,7 @@ window.addEventListener('DOMContentLoaded', () =>{
                         })
                     }
                 })
+
             })
     }
 
@@ -217,16 +237,18 @@ window.addEventListener('DOMContentLoaded', () =>{
         const inputMemorySize = document.getElementById('memorySize_upd__input');
         const inputPrice = document.getElementById('price_upd__input');
         
+        console.log(gPhones);
 
+        const phoneDefault = gPhones.filter(phone => phone._id == idInput.value)
 
         const data = {
-            phoneGroup: inputPhoneGroup.value.length == 0 ? null : inputPhoneGroup.value,
-            src : inputSrc.value,
-            picW : inputPicW.value,
-            picH : inputPicH.value,
-            phoneName : inputPhoneName.value,
-            memorySize : inputMemorySize.value,
-            price: inputPrice.value
+            phoneGroup: inputPhoneGroup.value.length == 0 ? phoneDefault.phoneGroup : inputPhoneGroup.value,
+            src : inputSrc.value.length == 0 ? phoneDefault.src : inputSrc.value,
+            picW : inputPicW.value.length == 0 ? phoneDefault.picW : inputPicW.value,
+            picH : inputPicH.value.length == 0 ? phoneDefault.picH : inputPicH.value,
+            phoneName : inputPhoneName.value.length == 0 ? phoneDefault.phoneName : inputPhoneName.value,
+            memorySize : inputMemorySize.value.length == 0 ? phoneDefault.memorySize : inputMemorySize.value,
+            price: inputPrice.value.length == 0 ? phoneDefault.price : inputPrice.value
         }
         console.log(data);
 
