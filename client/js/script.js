@@ -12,7 +12,8 @@ window.addEventListener('DOMContentLoaded', () =>{
 
     class Phone{
 
-        constructor(src, picW, picH, phoneName, memorySize, price, ...classes){
+        constructor(id, src, picW, picH, phoneName, memorySize, price, ...classes){
+            this.id = id,
             this.src = src, 
             this.picW = picW,
             this.picH = picH,
@@ -32,8 +33,10 @@ window.addEventListener('DOMContentLoaded', () =>{
             }
 
             element.innerHTML = `
-                <img src = ${this.src}  width = ${this.picW} height = ${this.picH} />
-                <p>${this.phoneName}<br>${this.memorySize}<br>${this.price}&#8381;</p>
+                <div id=${this.id}>
+                    <img src = ${this.src}  width = ${this.picW} height = ${this.picH} />
+                    <p>${this.phoneName}<br>${this.memorySize}<br>${this.price}&#8381;</p>
+                </div>
             `;
             return element;
         }
@@ -79,25 +82,33 @@ window.addEventListener('DOMContentLoaded', () =>{
         tabs[i].classList.add('active');
         phoneTabs[i].render();
     }
-    function createPhoneObject(src, picW, picH, phoneName, memorySize, price){
-            return new Phone(src,
+    function createPhoneObject(_id, src, picW, picH, phoneName, memorySize, price){
+            // console.log(_id)
+            return new Phone(_id, src,
                 picW,
                 picH,
                 phoneName,
                 memorySize,
                 price,
                 "phone"
-            ).returnElement()
+            )
+                .returnElement()
+                
     }
     function createTabs(phones){
         return new Tab('.tab__container', phones, 'tabcontent');
     }
 
+    const idInput = document.getElementById('_id__input') 
+
     function dataParse(data, arr){
         const iphones = [], samsungs = [], honors = []; 
 
         data[0].forEach(phone => {
-            iphones.push(createPhoneObject(phone.src,
+            // console.log(phone._id);
+            iphones.push(createPhoneObject(
+                phone._id,
+                phone.src,
                 phone.picW,
                 phone.picH,
                 phone.phoneName,
@@ -105,7 +116,9 @@ window.addEventListener('DOMContentLoaded', () =>{
                 phone.price))
         })
         data[1].forEach(phone => {
-            samsungs.push(createPhoneObject(phone.src,
+            samsungs.push(createPhoneObject(
+                phone._id,
+                phone.src,
                 phone.picW,
                 phone.picH,
                 phone.phoneName,
@@ -113,12 +126,22 @@ window.addEventListener('DOMContentLoaded', () =>{
                 phone.price))
         })
         data[2].forEach(phone => {
-            honors.push(createPhoneObject(phone.src,
+            honors.push(createPhoneObject(
+                phone._id,
+                phone.src,
                 phone.picW,
                 phone.picH,
                 phone.phoneName,
                 phone.memorySize,
                 phone.price))
+        })
+        iphones.forEach(phone => {
+            phone.addEventListener('click', (e) => {
+                e.preventDefault();
+                let elemId = e.currentTarget.childNodes[1].id;
+                console.log(e.currentTarget.childNodes[1].id);
+                idInput.value = elemId;
+            })
         })
         return [iphones, samsungs, honors];
     }
@@ -126,7 +149,6 @@ window.addEventListener('DOMContentLoaded', () =>{
     const renderPhones = async () => {
         getPhones()
             .then(data => {
-                console.log(data);
                 const phones = dataParse(data);
                 const phoneTabs = [createTabs(phones[0]), createTabs(phones[1]), createTabs(phones[2])];
                 showTabContent(0, phoneTabs);
@@ -176,15 +198,55 @@ window.addEventListener('DOMContentLoaded', () =>{
         createPhone(data)
             .then(data => {
                 console.log(data);
-                form.reset();
+                formCreate.reset();
             }).catch(() => {
                 
             }).finally(() => {
-                form.reset();
+                formCreate.reset();
             });
     };
 
-    const form = document.getElementById('create_phone__form')
-    form.addEventListener('submit', handlePostSubmit);
+    function handleUpdateSubmit(event){
+        event.preventDefault();
+
+        const inputPhoneGroup = document.getElementById('phoneGroup_upd__input');
+        const inputSrc = document.getElementById('src_upd__input');
+        const inputPicW = document.getElementById('picW_upd__input');
+        const inputPicH = document.getElementById('picH_upd__input');
+        const inputPhoneName = document.getElementById('phoneName_upd__input');
+        const inputMemorySize = document.getElementById('memorySize_upd__input');
+        const inputPrice = document.getElementById('price_upd__input');
+        
+
+
+        const data = {
+            phoneGroup: inputPhoneGroup.value.length == 0 ? null : inputPhoneGroup.value,
+            src : inputSrc.value,
+            picW : inputPicW.value,
+            picH : inputPicH.value,
+            phoneName : inputPhoneName.value,
+            memorySize : inputMemorySize.value,
+            price: inputPrice.value
+        }
+        console.log(data);
+
+        updatePhone(idInput.value, data)
+            .then(data => {
+                console.log(data);
+                formUpdate.reset();
+            }).catch(() => {
+                
+            }).finally(() => {
+                formUpdate.reset();
+            });
+    };
+
+    const formCreate = document.getElementById('create_phone__form')
+    formCreate.addEventListener('submit', handlePostSubmit);
+
+    const formUpdate = document.getElementById('update_phone__form')
+    formUpdate.addEventListener('submit', handleUpdateSubmit);
+
+
     
 });

@@ -26,7 +26,7 @@ export const getData = async (url) => {
 }
 
 export const updateData = async (url, data) => {
-    return await request(url, 'PUT');
+    return await request(url, 'PATCH', data);
 }
 
 export const deleteData = async (url, data) => {

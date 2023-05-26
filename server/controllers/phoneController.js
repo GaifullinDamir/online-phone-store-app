@@ -89,12 +89,12 @@ export const update = async (req, res) => {
             },
         );
         res.json({
-            success:true,
+            success:true
         })
-    }catch{err}{
+    }catch(err){
         console.log(err);
         res.status(500).json({
-            message:'Не удалось обновить данные телефона',
+            message:'Не удалось обновить телефон',
         });
     }
 }
