@@ -1,4 +1,6 @@
-
+body{
+    min-width: 100%;
+}
 #phones_content{
     min-height: 100vh;
     flex-basis: 83%;
@@ -64,4 +66,23 @@
 
 .active{
     font-size:27px;
+}
+
+#create_phone__form{
+    margin: 40px 0; 
+    display: flex;
+    flex-wrap:wrap;
+    justify-content:space-around;
+    align-items:baseline;
+}
+
+#create_phone__form input{
+    min-height:30px;
+    min-width: 100px;
+    font-size: 15px;
+}
+
+#create_phone__form button{
+    margin-top: 10px;
+    padding: 5px 25px;
 }
