@@ -263,12 +263,16 @@ window.addEventListener('DOMContentLoaded', () =>{
             });
     };
 
-    const formCreate = document.getElementById('create_phone__form')
+    const formCreate = document.getElementById('create_phone__form');
     formCreate.addEventListener('submit', handlePostSubmit);
 
-    const formUpdate = document.getElementById('update_phone__form')
+    const formUpdate = document.getElementById('update_phone__form');
     formUpdate.addEventListener('submit', handleUpdateSubmit);
 
-
+    const deleteBtn = document.getElementById('delete__button');
+    deleteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        deletePhone(idInput.value);
+    })
     
 });

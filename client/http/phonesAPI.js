@@ -15,5 +15,5 @@ export const updatePhone = async (id, data) => {
 }
 
 export const deletePhone = async (id) => {
-    return await deleteData(`${_baseURL}:${id}`);
+    return await deleteData(`${_baseURL}${id}`);
 }
