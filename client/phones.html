@@ -3,9 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/phones_style.css">
-        <script defer src = "js/script.js"></script>
+        
+        <script type="module" defer src = "js/script.js"></script>
         <title>Телефоны</title>
     </head>
     <body>
@@ -17,11 +19,6 @@
                     <a href = "accesories.html" title = "Страница с различными аксессуарами">Аксессуары</a>
                     <a href = "branches.html" title = "Наши филиалы">Филиалы</a>
                 </nav>
-                <form id ="phones__form" method="post">
-                    <input type="text" id="username__input" placeholder="Ваше имя">
-                    <input type="text" id="age__input" placeholder="Ваш возраст">
-                    <button type="submit">Отправить</button>
-                </form>
             </div>
         </header>
         <main>
@@ -38,6 +35,17 @@
                     </div>
                 </section> 
                 <section id = "phones_content">
+                    <form id="create_phone__form" >
+                        <input type="text" id="phoneGroup__input" placeholder="phoneGroup">
+                        <input type="text" id="src__input" placeholder="src">
+                        <input type="text" id="picW__input" placeholder="picW">
+                        <input type="text" id="picH__input" placeholder="picH">
+                        <input type="text" id="phoneName__input" placeholder="phoneName">
+                        <input type="text" id="memorySize__input" placeholder="memorySize">
+                        <input type="text" id="price__input" placeholder="price">
+                        <button type="submit">Добавить</button>
+                    </form>
+                    <hr/>
                     <h2>Телефоны</h2>
                     <hr>
                     <div class = "tab__container">
@@ -50,5 +58,6 @@
                 <p>©НА СВЯЗИ. Все права защищены</p>
             </div>
         </footer>
+
     </body>
 </html>

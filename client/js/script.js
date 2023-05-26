@@ -1,28 +1,5 @@
 'use strict'
-
-const postData = async (url, data) => {
-    //Поулчаем Promise, который возвращает fetch().
-    const res = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    //Возвраащем Promise.
-    return await res.json();
-}
-
-const getResources = async (url) => {
-    //Поулчаем Promise, который возвращает fetch().
-    const res = await fetch(url);
-
-    if(!res.ok){
-        throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-    }
-    //Возвраащем Promise.
-    return await res.json();
-}
+import {createPhone, getPhones, updatePhone, deletePhone} from '../http/phonesAPI.js';
 
 window.addEventListener('DOMContentLoaded', () =>{
 
@@ -102,7 +79,7 @@ window.addEventListener('DOMContentLoaded', () =>{
         tabs[i].classList.add('active');
         phoneTabs[i].render();
     }
-    function createPhone(src, picW, picH, phoneName, memorySize, price){
+    function createPhoneObject(src, picW, picH, phoneName, memorySize, price){
             return new Phone(src,
                 picW,
                 picH,
@@ -119,24 +96,24 @@ window.addEventListener('DOMContentLoaded', () =>{
     function dataParse(data, arr){
         const iphones = [], samsungs = [], honors = []; 
 
-        data.iphones.forEach(phone => {
-            iphones.push(createPhone(phone.src,
+        data[0].forEach(phone => {
+            iphones.push(createPhoneObject(phone.src,
                 phone.picW,
                 phone.picH,
                 phone.phoneName,
                 phone.memorySize,
                 phone.price))
         })
-        data.samsungs.forEach(phone => {
-            samsungs.push(createPhone(phone.src,
+        data[1].forEach(phone => {
+            samsungs.push(createPhoneObject(phone.src,
                 phone.picW,
                 phone.picH,
                 phone.phoneName,
                 phone.memorySize,
                 phone.price))
         })
-        data.honors.forEach(phone => {
-            honors.push(createPhone(phone.src,
+        data[2].forEach(phone => {
+            honors.push(createPhoneObject(phone.src,
                 phone.picW,
                 phone.picH,
                 phone.phoneName,
@@ -146,54 +123,68 @@ window.addEventListener('DOMContentLoaded', () =>{
         return [iphones, samsungs, honors];
     }
 
-    const getPhones = async () => {
-        await getResources('http://localhost:8000/getPhonesData').
-            then(data => {
+    const renderPhones = async () => {
+        getPhones()
+            .then(data => {
+                console.log(data);
                 const phones = dataParse(data);
                 const phoneTabs = [createTabs(phones[0]), createTabs(phones[1]), createTabs(phones[2])];
                 showTabContent(0, phoneTabs);
                 return phoneTabs;
-            }).
-                then((phoneTabs) => {
-                    tabsParent.addEventListener('click', (e) => {
-                        const target = e.target;
-                        if(target && target.classList.contains('tabheader__item')){
-                            tabs.forEach((item, i) =>{
-                                if (target == item) {
-                                    deleteTabContent();
-                                    showTabContent(i, phoneTabs);
-                                }
-                            })
-                        }
-                    })
+            })
+            .then((phoneTabs) => {
+                tabsParent.addEventListener('click', (e) => {
+                    const target = e.target;
+                    if(target && target.classList.contains('tabheader__item')){
+                        tabs.forEach((item, i) =>{
+                            if (target == item) {
+                                deleteTabContent();
+                                showTabContent(i, phoneTabs);
+                            }
+                        })
+                    }
                 })
+            })
     }
 
-    getPhones();
+    renderPhones();
     
-    function handleSubmit(event){
+    function handlePostSubmit(event){
         event.preventDefault();
 
-        const inputName = document.getElementById('username__input');
-        const inputAge = document.getElementById('age__input');
+        const inputPhoneGroup = document.getElementById('phoneGroup__input');
+        const inputSrc = document.getElementById('src__input');
+        const inputPicW = document.getElementById('picW__input');
+        const inputPicH = document.getElementById('picH__input');
+        const inputPhoneName = document.getElementById('phoneName__input');
+        const inputMemorySize = document.getElementById('memorySize__input');
+        const inputPrice = document.getElementById('price__input');
+        
+
 
         const data = {
-            username: inputName.value,
-            age: inputAge.value
+            phoneGroup: inputPhoneGroup.value,
+            src : inputSrc.value,
+            picW : inputPicW.value,
+            picH : inputPicH.value,
+            phoneName : inputPhoneName.value,
+            memorySize : inputMemorySize.value,
+            price: inputPrice.value
         }
+        console.log(data);
 
-        postData('http://localhost:8000/enter', data) 
-                .then(data => {
-                    console.log(data);
-                    form.reset();
-                }).catch(() => {
-                    
-                }).finally(() => {
-                    form.reset();
-                });
+        createPhone(data)
+            .then(data => {
+                console.log(data);
+                form.reset();
+            }).catch(() => {
+                
+            }).finally(() => {
+                form.reset();
+            });
     };
 
-    const form = document.getElementById('phones__form')
-    form.addEventListener('submit', handleSubmit);
+    const form = document.getElementById('create_phone__form')
+    form.addEventListener('submit', handlePostSubmit);
     
 });
